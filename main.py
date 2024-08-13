@@ -24,7 +24,11 @@ app = FastAPI()
 #     allow_headers=["*"],
 # )
 
-app.mount('/assets', StaticFiles(directory="frontend/dist/assets"))
+# 개발용
+# app.mount('/assets', StaticFiles(directory="frontend/dist/assets"))
+
+# 배포용
+app.mount('/assets', StaticFiles(directory="/code/frontend/dist/assets"))
 
 @app.post("/save_label")
 async def save_label(label_info: LabelInfoReq):

@@ -4,9 +4,16 @@ import sqlite3
 import base64
 
 def _get_label_info(label_id):
+
     # json label 탐색
-    with open(f"test/json/{label_id}.json", 'r') as fp:
+    # 개발용
+    # with open(f"test/json/{label_id}.json", 'r') as fp:
+    #     json_label = json.load(fp)
+
+    # 배포용
+    with open(f"/data/aisvc_data/intern2024_2/NLP_paper/label_data/json/{label_id}.json", 'r') as fp:
         json_label = json.load(fp)
+
 
     html = json_label['html']
     origin_image_path = json_label['origin_image_path']
@@ -19,7 +26,13 @@ def _get_label_info(label_id):
     
 
     # db 조회
-    con = sqlite3.connect('test.db')
+    
+    # 개발용
+    # con = sqlite3.connect('test.db')
+    
+    # 배포용
+    con = sqlite3.connect('/data/aisvc_data/intern2024_2/NLP_paper/label_data/label_info.db')
+
     cur = con.cursor()
 
     res = cur.execute(f"SELECT * FROM label_info WHERE label_id={label_id}").fetchone()

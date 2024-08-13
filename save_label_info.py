@@ -3,13 +3,17 @@ import sqlite3
 
 def save_html(label_id:int, html: str):
     
-    with open(f"test/json/{label_id}.json", 'r') as fp:
+    # 개발용
+    # with open(f"test/json/{label_id}.json", 'r') as fp:
+    
+    # 배포용
+    with open(f"/data/aisvc_data/intern2024_2/NLP_paper/label_data/json/{label_id}.json", 'r') as fp:
 
         json_label = json.load(fp)
         json_label['html'] = html
         origin_image_path = json_label['origin_image_path']
     
-    with open(f"test/json/{label_id}.json", 'w') as fp:
+    with open(f"/data/aisvc_data/intern2024_2/NLP_paper/label_data/json/{label_id}.json", 'w') as fp:
         json.dump(json_label, fp)
 
     return origin_image_path
@@ -24,7 +28,11 @@ def save_db(label_id:int, origin_image_path: str,
     semantic_merged_cell: int,
     partial_lined: int):
     
-    con = sqlite3.connect('test.db') 
+    # 개발용
+    # con = sqlite3.connect('test.db')
+    
+    # 배포용
+    con = sqlite3.connect('/data/aisvc_data/intern2024_2/NLP_paper/label_data/label_info.db')
     cur = con.cursor()
 
     res = cur.execute(f"SELECT * FROM label_info WHERE label_id={label_id}")
