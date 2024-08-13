@@ -1,4 +1,4 @@
 {
-    "path": "../img/2.jpg",
+    "origin_image_path": "test/img/2.jpg",
     "html": "<p>what</p>"
 }
