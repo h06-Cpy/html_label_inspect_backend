@@ -1,26 +1,30 @@
 from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
+# from fastapi.middleware.cors import CORSMiddleware
 from models import LabelInfoReq
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 
 from save_label_info import save_html, save_db
 from get_label_infos import _get_label_info
 
 app = FastAPI()
 
-origins = [
-    'http://localhost:5173',
-    'https://localhost:5173',
-    'http://127.0.0.1:5173',
-    'https://127.0.0.1:5173',
-]
+# origins = [
+#     'http://localhost:5173',
+#     'https://localhost:5173',
+#     'http://127.0.0.1:5173',
+#     'https://127.0.0.1:5173',
+# ]
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=origins,
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+# app.add_middleware(
+#     CORSMiddleware,
+#     allow_origins=origins,
+#     allow_credentials=True,
+#     allow_methods=["*"],
+#     allow_headers=["*"],
+# )
+
+app.mount('/assets', StaticFiles(directory="frontend/dist/assets"))
 
 @app.post("/save_label")
 async def save_label(label_info: LabelInfoReq):
@@ -51,5 +55,5 @@ async def get_label_info(label_id: int):
     return _get_label_info(label_id)
 
 @app.get("/")
-async def root():
-    return {"message": "Hello World"}
+async def index():
+    return FileResponse("frontend/dist/index.html")

@@ -29,7 +29,7 @@ def _get_label_info(label_id):
         response = {
             "inspected": False,
             "html": html,
-            "imageName": origin_image_path.split('.')[-1],
+            "imageName": origin_image_path.split('/')[-1],
             "originImage": origin_image
         }
     
