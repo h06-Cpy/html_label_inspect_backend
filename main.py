@@ -8,10 +8,10 @@ from get_label_infos import _get_label_info
 app = FastAPI()
 
 origins = [
-    'http://localhost:5172',
-    'https://localhost:5172',
-    'http://127.0.0.1:5172',
-    'https://127.0.0.1:5172',
+    'http://localhost:5173',
+    'https://localhost:5173',
+    'http://127.0.0.1:5173',
+    'https://127.0.0.1:5173',
 ]
 
 app.add_middleware(
@@ -39,6 +39,7 @@ async def save_label(label_info: LabelInfoReq):
         
     except Exception as e:
         print(e)
+        # raise(e)
         return {"success": False, "message": str(e)}
     
     return {"success": True, "message": "label has been saved!"}

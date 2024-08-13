@@ -15,10 +15,10 @@ def save_html(label_id:int, html: str):
     return origin_image_path
 
 def save_db(label_id:int, origin_image_path: str,
-    struct_correct: int,
-    char_correct: int,
-    th_used: int,
-    value_empty_cell: int,
+    struct_correct: bool,
+    char_correct: bool,
+    th_used: bool,
+    value_empty_cell: bool,
     supsub: int,
     cell_subtitle: int,
     semantic_merged_cell: int,
@@ -39,6 +39,7 @@ def save_db(label_id:int, origin_image_path: str,
    # 검수된 레이블
     else:
         print('update!')
+
         cur.execute(f"""
             UPDATE label_info SET
                 struct_correct={struct_correct},
@@ -50,7 +51,7 @@ def save_db(label_id:int, origin_image_path: str,
                 semantic_merged_cell={semantic_merged_cell},
                 partial_lined={partial_lined}
 
-            WHERE label_id={label_id}'
+            WHERE label_id={label_id}
         """)
 
     con.commit()

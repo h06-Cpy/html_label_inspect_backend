@@ -5,10 +5,10 @@ class LabelInfoReq(BaseModel):
 
     html: str
 
-    struct_correct: int 
-    char_correct: int 
-    th_used: int 
-    value_empty_cell: int 
+    struct_correct: bool 
+    char_correct: bool 
+    th_used: bool 
+    value_empty_cell: bool
     supsub: int 
     cell_subtitle: int 
     semantic_merged_cell: int 
