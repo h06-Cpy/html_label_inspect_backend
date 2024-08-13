@@ -5,6 +5,7 @@ con = sqlite3.connect('test.db')
 cur = con.cursor()
 
 cur.execute("""CREATE TABLE label_info(
+                label_id INTEGER PRIMARY KEY,
                 origin_image_path TEXT,
                 struct_correct INTEGER, 
                 char_correct INTEGER, 

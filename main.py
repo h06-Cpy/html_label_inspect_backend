@@ -1,7 +1,9 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from save_label_info import save_html, save_db
 from models import LabelInfoReq
+
+from save_label_info import save_html, save_db
+from get_label_infos import _get_label_info
 
 app = FastAPI()
 
@@ -44,12 +46,8 @@ async def save_label(label_info: LabelInfoReq):
 
 @app.get('/label_info/{label_id}')
 async def get_label_info(label_id: int):
-    # db 조회
 
-    # 검수 안된 경우
-
-    # 검수 한 경우
-    pass
+    return _get_label_info(label_id)
 
 @app.get("/")
 async def root():
