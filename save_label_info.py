@@ -14,7 +14,7 @@ def save_html(label_id:int, html: str):
 
     return origin_image_path
 
-def save_db(origin_image_path: str,
+def save_db(label_id:int, origin_image_path: str,
     struct_correct: int,
     char_correct: int,
     th_used: int,
@@ -27,13 +27,14 @@ def save_db(origin_image_path: str,
     con = sqlite3.connect('test.db') 
     cur = con.cursor()
 
-    res = cur.execute(f"SELECT * FROM label_info WHERE origin_image_path='{origin_image_path}'")
+    res = cur.execute(f"SELECT * FROM label_info WHERE label_id={label_id}")
    
    # 검수 안된 레이블
     if res.fetchone() is None:
         print('insert!')
         cur.execute(f"""INSERT INTO label_info VALUES 
-                   ('{origin_image_path}', {struct_correct}, {char_correct}, {th_used}, {value_empty_cell}, {supsub}, {cell_subtitle}, {semantic_merged_cell}, {partial_lined})""")
+                   ({label_id}, '{origin_image_path}', {struct_correct}, {char_correct}, 
+                   {th_used}, {value_empty_cell}, {supsub}, {cell_subtitle}, {semantic_merged_cell}, {partial_lined})""")
    
    # 검수된 레이블
     else:
@@ -49,7 +50,7 @@ def save_db(origin_image_path: str,
                 semantic_merged_cell={semantic_merged_cell},
                 partial_lined={partial_lined}
 
-            WHERE origin_image_path='{origin_image_path}'
+            WHERE label_id={label_id}'
         """)
 
     con.commit()

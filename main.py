@@ -27,7 +27,7 @@ async def save_label(label_info: LabelInfoReq):
     try:
         origin_image_path = save_html(label_info.label_id, label_info.html)
 
-        save_db(origin_image_path,
+        save_db(label_info.label_id, origin_image_path,
         label_info.struct_correct,
         label_info.char_correct,
         label_info.th_used,

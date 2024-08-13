@@ -22,7 +22,7 @@ def _get_label_info(label_id):
     con = sqlite3.connect('test.db')
     cur = con.cursor()
 
-    res = cur.execute(f"SELECT * FROM label_info WHERE origin_image_path='{origin_image_path}'").fetchone()
+    res = cur.execute(f"SELECT * FROM label_info WHERE label_id={label_id}").fetchone()
 
     # 검수 안된 경우
     if res is None:
@@ -35,10 +35,10 @@ def _get_label_info(label_id):
     
     # 검수 한 경우
     else:
-        (_, struct_correct, char_correct, th_used, value_empty_cell, supsub, cell_subtitle, semantic_merged_cell, partial_lined) = res
+        (_, _, struct_correct, char_correct, th_used, value_empty_cell, supsub, cell_subtitle, semantic_merged_cell, partial_lined) = res
         
         response = {
-            "inspected": False,
+            "inspected": True,
             "html": html,
             "imageName": origin_image_path.split('.')[-1],
             "originImage": origin_image,
