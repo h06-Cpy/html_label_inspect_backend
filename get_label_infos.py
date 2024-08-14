@@ -48,7 +48,7 @@ def _get_label_info(label_id):
     
     # 검수 한 경우
     else:
-        (_, _, struct_correct, char_correct, th_used, value_empty_cell, supsub, cell_subtitle, semantic_merged_cell, partial_lined) = res
+        (_, _, struct_correct, char_correct, th_used, value_empty_cell, supsub, cell_subtitle, semantic_merged_cell, partial_lined, topleft_header) = res
         
         response = {
             "inspected": True,
@@ -62,7 +62,8 @@ def _get_label_info(label_id):
             "supsub": supsub,
             "cellSubtitle": cell_subtitle,
             "semanticMergedCell": semantic_merged_cell,
-            "partialLined": partial_lined
+            "partialLined": partial_lined,
+            "topleftHeader": topleft_header
         }
     
     con.close()

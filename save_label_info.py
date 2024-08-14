@@ -26,7 +26,9 @@ def save_db(label_id:int, origin_image_path: str,
     supsub: int,
     cell_subtitle: int,
     semantic_merged_cell: int,
-    partial_lined: int):
+    partial_lined: int,
+    topleft_header: int):
+
     
     # 개발용
     # con = sqlite3.connect('test.db')
@@ -42,7 +44,7 @@ def save_db(label_id:int, origin_image_path: str,
         print('insert!')
         cur.execute(f"""INSERT INTO label_info VALUES 
                    ({label_id}, '{origin_image_path}', {struct_correct}, {char_correct}, 
-                   {th_used}, {value_empty_cell}, {supsub}, {cell_subtitle}, {semantic_merged_cell}, {partial_lined})""")
+                   {th_used}, {value_empty_cell}, {supsub}, {cell_subtitle}, {semantic_merged_cell}, {partial_lined}, {topleft_header})""")
    
    # 검수된 레이블
     else:
@@ -57,7 +59,8 @@ def save_db(label_id:int, origin_image_path: str,
                 supsub={supsub},
                 cell_subtitle={cell_subtitle},
                 semantic_merged_cell={semantic_merged_cell},
-                partial_lined={partial_lined}
+                partial_lined={partial_lined},
+                topleft_header={topleft_header}
 
             WHERE label_id={label_id}
         """)

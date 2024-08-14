@@ -43,7 +43,8 @@ async def save_label(label_info: LabelInfoReq):
         label_info.supsub,
         label_info.cell_subtitle,
         label_info.semantic_merged_cell,
-        label_info.partial_lined)
+        label_info.partial_lined,
+        label_info.topleft_header)
         
     except Exception as e:
         print(e)

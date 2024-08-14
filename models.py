@@ -13,3 +13,4 @@ class LabelInfoReq(BaseModel):
     cell_subtitle: int 
     semantic_merged_cell: int 
     partial_lined: int
+    topleft_header: int
