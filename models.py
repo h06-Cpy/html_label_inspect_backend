@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from typing import List
 
 class LabelInfoReq(BaseModel):
     label_id: int
@@ -9,8 +10,8 @@ class LabelInfoReq(BaseModel):
     char_correct: bool 
     th_used: bool 
     value_empty_cell: bool
-    supsub: int 
-    cell_subtitle: int 
-    semantic_merged_cell: int 
-    partial_lined: int
-    topleft_header: int
+    special_char: List[int]
+    cell_subtitle: List[int] 
+    semantic_merged_cell: List[int] 
+    partial_lined: List[int]
+    topleft_header: List[int]

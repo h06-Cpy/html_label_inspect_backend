@@ -3,16 +3,17 @@ import json
 import sqlite3
 import base64
 
-def _get_label_info(label_id):
+def get_one_label_info(label_id):
 
     # json label 탐색
+
     # 개발용
-    # with open(f"test/json/{label_id}.json", 'r') as fp:
-    #     json_label = json.load(fp)
+    with open(f"test/json/{label_id}.json", 'r') as fp:
+        json_label = json.load(fp)
 
     # 배포용
-    with open(f"/data/aisvc_data/intern2024_2/NLP_paper/label_data/json/{label_id}.json", 'r') as fp:
-        json_label = json.load(fp)
+    # with open(f"/data/aisvc_data/intern2024_2/NLP_paper/label_data/json/{label_id}.json", 'r') as fp:
+    #     json_label = json.load(fp)
 
 
     html = json_label['html']
@@ -28,10 +29,10 @@ def _get_label_info(label_id):
     # db 조회
     
     # 개발용
-    # con = sqlite3.connect('test.db')
+    con = sqlite3.connect('test.db')
     
     # 배포용
-    con = sqlite3.connect('/data/aisvc_data/intern2024_2/NLP_paper/label_data/label_info.db')
+    # con = sqlite3.connect('/data/aisvc_data/intern2024_2/NLP_paper/label_data/label_info.db')
 
     cur = con.cursor()
 
@@ -48,7 +49,7 @@ def _get_label_info(label_id):
     
     # 검수 한 경우
     else:
-        (_, _, struct_correct, char_correct, th_used, value_empty_cell, supsub, cell_subtitle, semantic_merged_cell, partial_lined, topleft_header) = res
+        (_, _, struct_correct, char_correct, th_used, value_empty_cell, special_char, cell_subtitle, semantic_merged_cell, partial_lined, topleft_header) = res
         
         response = {
             "inspected": True,
@@ -59,11 +60,11 @@ def _get_label_info(label_id):
             "charCorrect": bool(char_correct),
             "thUsed": bool(th_used),
             "valueEmptyCell": bool(value_empty_cell),
-            "supsub": supsub,
-            "cellSubtitle": cell_subtitle,
-            "semanticMergedCell": semantic_merged_cell,
-            "partialLined": partial_lined,
-            "topleftHeader": topleft_header
+            "specialChar": [int(i) for i in special_char.split()],
+            "cellSubtitle": [int(i) for i in cell_subtitle.split()],
+            "semanticMergedCell": [int(i) for i in semantic_merged_cell.split()],
+            "partialLined": [int(i) for i in partial_lined.split()],
+            "topleftHeader": [int(i) for i in topleft_header.split()]
         }
     
     con.close()
