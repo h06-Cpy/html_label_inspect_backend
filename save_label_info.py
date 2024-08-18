@@ -1,19 +1,32 @@
 import json
 import sqlite3
-from typing import List
+import base64
+import os
 
-def save_html(label_id:int, html: str):
+def save_html_image(origin_id:int, html: str, saved_image: str):
     
     # 개발용
-    with open(f"test/json/{label_id}.json", 'r') as fp:
+    with open(f"test/json/{origin_id}.json", 'r') as fp:
         json_label = json.load(fp)
         json_label['html'] = html
         origin_image_path = json_label['origin_image_path']
     
-    with open(f"test/json/{label_id}.json", 'w') as fp:
+    with open(f"test/json/{origin_id}.json", 'w') as fp:
         json.dump(json_label, fp)
 
-    return origin_image_path
+    id_to_save = 0
+    for name in os.listdir('test/saved_img'):
+        if f"{origin_id}_{id_to_save}" in name:
+            id_to_save += 1
+
+    # 개발용 이미지 저장 경로
+    saved_image_path = f"test/saved_img/{origin_id}_{id_to_save}.png"
+
+    with open(saved_image_path, 'wb') as fp:
+        fp.write(base64.b64decode(saved_image.replace('data:image/png;base64,','')))
+
+    return origin_image_path, saved_image_path
+
     
     # 배포용
     # with open(f"/data/aisvc_data/intern2024_2/NLP_paper/label_data/json/{label_id}.json", 'r') as fp:
@@ -27,16 +40,7 @@ def save_html(label_id:int, html: str):
 
     # return origin_image_path
 
-def save_db(label_id:int, origin_image_path: str,
-    struct_correct: bool,
-    char_correct: bool,
-    th_used: bool,
-    value_empty_cell: bool,
-    special_char: List[int],
-    cell_subtitle: List[int],
-    semantic_merged_cell: List[int],
-    partial_lined: List[int],
-    topleft_header: List[int]):
+def save_db(origin_id:int, origin_image_path: str, saved_image_path:str, html: str):
 
     
     # 개발용
@@ -47,40 +51,31 @@ def save_db(label_id:int, origin_image_path: str,
     
     cur = con.cursor()
 
-    res = cur.execute(f"SELECT * FROM label_info WHERE label_id={label_id}")
+    res = cur.execute(f"SELECT * FROM label_info WHERE save_image_path='{saved_image_path}'")
 
-    # db 저장 시 리스트 -> 공백으로 구분된 string으로 변환
-    special_char = ' '.join([str(i) for i in special_char])
-    cell_subtitle = ' '.join([str(i) for i in cell_subtitle])
-    semantic_merged_cell = ' '.join([str(i) for i in semantic_merged_cell])
-    partial_lined = ' '.join([str(i) for i in partial_lined])
-    topleft_header = ' '.join([str(i) for i in topleft_header])
-
-   # 검수 안된 레이블
     if res.fetchone() is None:
         print('insert!')
-        cur.execute(f"""INSERT INTO label_info VALUES 
-                   ({label_id}, '{origin_image_path}', {struct_correct}, {char_correct}, 
-                   {th_used}, {value_empty_cell}, '{special_char}', '{cell_subtitle}', '{semantic_merged_cell}', '{partial_lined}', '{topleft_header}')""")
+
+        cur.execute('INSERT INTO label_info VALUES (?, ?, ?, ?)', (origin_id, origin_image_path, saved_image_path, html))
    
-   # 검수된 레이블
-    else:
-        print('update!')
+#    # 검수된 레이블
+#     else:
+#         print('update!')
 
-        cur.execute(f"""
-            UPDATE label_info SET
-                struct_correct={struct_correct},
-                char_correct={char_correct},
-                th_used={th_used},
-                value_empty_cell={value_empty_cell},
-                special_char='{special_char}',
-                cell_subtitle='{cell_subtitle}',
-                semantic_merged_cell='{semantic_merged_cell}',
-                partial_lined='{partial_lined}',
-                topleft_header='{topleft_header}'
+#         cur.execute(f"""
+#             UPDATE label_info SET
+#                 struct_correct={struct_correct},
+#                 char_correct={char_correct},
+#                 th_used={th_used},
+#                 value_empty_cell={value_empty_cell},
+#                 special_char='{special_char}',
+#                 cell_subtitle='{cell_subtitle}',
+#                 semantic_merged_cell='{semantic_merged_cell}',
+#                 partial_lined='{partial_lined}',
+#                 topleft_header='{topleft_header}'
 
-            WHERE label_id={label_id}
-        """)
+#             WHERE label_id={save_image_path}
+#         """)
 
     con.commit()
     con.close()
