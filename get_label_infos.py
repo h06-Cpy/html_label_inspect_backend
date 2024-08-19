@@ -1,7 +1,8 @@
 import os
 import json
 import sqlite3
-import base64
+import re
+from db_unlock import unlock_db
 
 def get_one_label_info(origin_id):
 
@@ -26,34 +27,71 @@ def get_one_label_info(origin_id):
     #     origin_image = base64.b64encode(fp.read())
     
 
-    # db 조회
+
+    try:
+        # db 조회
+        
+        # 개발용
+        con = sqlite3.connect('test.db')
+        
+        # 배포용
+        # con = sqlite3.connect('/data/aisvc_data/intern2024_2/NLP_paper/label_data/label_info.db')
+
+        cur = con.cursor()
+        cur.execute('PRAGMA journal_mode=WAL;')
+        con.commit()
+
+        res = cur.execute(f"SELECT COUNT(*) FROM label_info").fetchone()
+        print(res)
+        isInspected = False
+
+        # 개발용 경로
+        for name in os.listdir('test/saved_img'):
+            if re.match(fr'{origin_id}_\d+.png', name):
+                isInspected = True
+                break
+
+        response = {
+            "isInspected": isInspected,
+            "originHtml": html,
+            "totalGeneratedNum": res[0]
+        }
     
-    # 개발용
-    con = sqlite3.connect('test.db')
+        
+        con.close()
+
+    except sqlite3.OperationalError:
+        unlock_db()
+
+        # 개발용
+        con = sqlite3.connect('test.db')
+        
+        # 배포용
+        # con = sqlite3.connect('/data/aisvc_data/intern2024_2/NLP_paper/label_data/label_info.db')
+
+        cur = con.cursor()
+        cur.execute('PRAGMA journal_mode=WAL;')
+        con.commit()
+
+        res = cur.execute(f"SELECT COUNT(*) FROM label_info").fetchone()
+        print(res)
+        isInspected = False
+
+        # 개발용 경로
+        for name in os.listdir('test/saved_img'):
+            if re.match(fr'{origin_id}_\d+.png', name):
+                isInspected = True
+                break
+
+        response = {
+            "isInspected": isInspected,
+            "originHtml": html,
+            "totalGeneratedNum": res[0]
+        }
     
-    # 배포용
-    # con = sqlite3.connect('/data/aisvc_data/intern2024_2/NLP_paper/label_data/label_info.db')
+        
+        con.close()
 
-    cur = con.cursor()
-
-    res = cur.execute(f"SELECT COUNT(*) FROM label_info").fetchone()
-    print(res)
-    isInspected = False
-
-    # 개발용 경로
-    for name in os.listdir('test/saved_img'):
-        if f'{origin_id}_' in name:
-            isInspected = True
-            break
-
-    response = {
-        "isInspected": isInspected,
-        "originHtml": html,
-        "totalGeneratedNum": res[0]
-    }
-   
-    
-    con.close()
 
     return response
     
