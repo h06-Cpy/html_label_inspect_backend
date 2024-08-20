@@ -56,7 +56,10 @@ try {
 
     Write-Output "All modifications have been reverted successfully."
 
-    # docker save $imageTag -o hli.tar
+    # Step 7: docker save
+    Write-Output "Save Start!"
+    docker save $imageTag -o hli.tar
+    Write-Output "saved successfully."
 
 } catch {
     Write-Error "An error occurred: $_"
