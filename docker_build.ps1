@@ -26,16 +26,16 @@ try {
 
     # Step 3: Modify paths in get_label_infos.py
     $getLabelInfosContent = Get-Content -Path $getLabelInfosPyPath
-    $getLabelInfosContent = $getLabelInfosContent -replace "test/json/\{origin_id\}.json", "/data/aisvc_data/intern2024_2/NLP_paper/label_data/json/{origin_id}.json"
+    $getLabelInfosContent = $getLabelInfosContent -replace "root_path = 'test'", "root_path = '/data/aisvc_data/intern2024_2/NLP_paper/label_data'"
     $getLabelInfosContent = $getLabelInfosContent -replace "test.db", "/data/aisvc_data/intern2024_2/NLP_paper/label_data/label_info.db"
-    $getLabelInfosContent = $getLabelInfosContent -replace "test/saved_img", "/data/aisvc_data/intern2024_2/NLP_paper/label_data/saved_img"
+    # $getLabelInfosContent = $getLabelInfosContent -replace "test/saved_img", "/data/aisvc_data/intern2024_2/NLP_paper/label_data/saved_img"
     $getLabelInfosContent | Set-Content -Path $getLabelInfosPyPath
 
     # Step 4: Modify paths in save_label_info.py
     $saveLabelInfoContent = Get-Content -Path $saveLabelInfoPyPath
-    $saveLabelInfoContent = $saveLabelInfoContent -replace "test/json/\{origin_id\}.json", "/data/aisvc_data/intern2024_2/NLP_paper/label_data/json/{origin_id}.json"
+    $saveLabelInfoContent = $saveLabelInfoContent -replace "root_path = 'test'", "root_path = '/data/aisvc_data/intern2024_2/NLP_paper/label_data'"
     $saveLabelInfoContent = $saveLabelInfoContent -replace "test.db", "/data/aisvc_data/intern2024_2/NLP_paper/label_data/label_info.db"
-    $saveLabelInfoContent = $saveLabelInfoContent -replace "test/saved_img", "/data/aisvc_data/intern2024_2/NLP_paper/label_data/saved_img"
+    # $saveLabelInfoContent = $saveLabelInfoContent -replace "test/saved_img", "/data/aisvc_data/intern2024_2/NLP_paper/label_data/saved_img"
     $saveLabelInfoContent | Set-Content -Path $saveLabelInfoPyPath
 
     # Step 5: Build Docker image with user-defined tag
